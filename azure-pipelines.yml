@@ -20,12 +20,10 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
-- task: CopyFiles@2
-  inputs:
-    Contents: '**/*.war'
-    TargetFolder: '$(build.artifactstagingdirectory)'
-- task: PublishBuildArtifacts@1
-  inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      ArtifactName: 'webapp'
-      publishLocation: 'Container'
+    displayName: 'Build with Maven'
+- script: |
+      mkdir -p /home/agent/deployments
+      cp target/*.war /home/agent/deployments/
+      echo "WAR deployed to:"
+      ls -la /home/agent/deployments/
+  displayName: 'Deploy WAR file'
