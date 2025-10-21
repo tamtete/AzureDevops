@@ -28,7 +28,7 @@ steps:
     pwd
     ls -la target/
     mkdir -p /home/agent/artifacts
-    cp $(Build.SourcesDirectory)/target/*.war /home/agent/artifacts/
+    cp $(Build.SourcesDirectory)/webapp/target/*.war /home/agent/artifacts/
     echo "WAR file copied to /home/agent/artifacts/"
     ls -la /home/agent/artifacts/
   displayName: 'Copy file'
