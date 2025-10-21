@@ -21,9 +21,20 @@ steps:
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
     displayName: 'Build with Maven'
-- script: |
-      mkdir -p /home/agent/deployments
-      cp target/*.war /home/agent/deployments/
-      echo "WAR deployed to:"
-      ls -la /home/agent/deployments/
-  displayName: 'Deploy WAR file'
+
+# Copy WAR files to staging directory
+- task: CopyFiles@2
+  inputs:
+      SourceFolder: '$(System.DefaultWorkingDirectory)/target'
+      Contents: '**/*.war'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+      flattenFolders: true
+  displayName: 'Copy WAR files'
+
+# Publish artifact for Release pipeline
+- task: PublishBuildArtifacts@1
+  inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: 'drop'
+      publishLocation: 'Container'
+  displayName: 'Publish Artifact: drop'
