@@ -25,7 +25,7 @@ steps:
 # Copy WAR files to staging directory- script: |
 - script: |
     mkdir -p /home/agent/artifacts
-    cp target/*.war /home/agent/artifacts/
+    cp $(Build.SourcesDirectory)/target/*.war /home/agent/artifacts/
     echo "WAR file copied to /home/agent/artifacts/"
     ls -la /home/agent/artifacts/
   displayName: 'Copy file'
