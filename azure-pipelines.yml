@@ -22,19 +22,23 @@ steps:
     goals: 'package'
     displayName: 'Build with Maven'
 
-# Copy WAR files to staging directory
+# Copy WAR files to staging directory- script: |
+- script: |
+    mkdir -p /home/agent/artifacts
+    cp target/*.war /home/agent/artifacts/
+    echo "WAR file copied to /home/agent/artifacts/"
+    ls -la /home/agent/artifacts/
+  displayName: 'Copy file'
+
 - task: CopyFiles@2
   inputs:
-      SourceFolder: '$(System.DefaultWorkingDirectory)/target'
-      Contents: '**/*.war'
-      TargetFolder: '$(Build.ArtifactStagingDirectory)'
-      flattenFolders: true
-  displayName: 'Copy WAR files'
+    Contents: '**/*.war'
+    TargetFolder: '$(build.artifactstagingdirectory)'
 
 # Publish artifact for Release pipeline
 - task: PublishBuildArtifacts@1
   inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      ArtifactName: 'drop'
-      publishLocation: 'Container'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
   displayName: 'Publish Artifact: drop'
